@@ -1,7 +1,7 @@
-import { ExceptionHandlerD, LogClassCreationD } from "../types/decorators"
-import { TextMessage } from "../types/telegram"
-import { commands } from "./commands/commands"
-import { commandsHandler } from "./commands/commands-handler"
+import { ExceptionHandlerD, LogClassCreationD } from "../../types/decorators"
+import { TextMessage } from "../../types/telegram"
+import { commands } from "../commands/commands"
+import { commandsHandler } from "./commands-handler"
 import { Telegram } from "telegraf"
 
 @LogClassCreationD

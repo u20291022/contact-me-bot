@@ -7,7 +7,7 @@ import { Telegram } from "telegraf"
 @ExceptionHandlerD()
 class StartCommand {
   public handle(message: TextMessage, methods: Telegram) {
-    logger.write(`user with [${message.from.id}] id send "start" command!`)
+    logger.write(`User [${message.from.first_name}] with [${message.from.id}] id send "start" command!`)
     
     methods.sendMessage(
       message.chat.id,

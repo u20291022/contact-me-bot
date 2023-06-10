@@ -2,7 +2,7 @@ import { Telegraf, Telegram } from "telegraf"
 import { message } from "telegraf/filters"
 import { ExceptionHandlerD, LogClassCreationD } from "../types/decorators"
 import { logger } from "../utils/logger"
-import { textMessagesHandler } from "./text-messages-handler"
+import { textMessagesHandler } from "./handlers/text-messages-handler"
 import { commands } from "./commands/commands"
 
 @LogClassCreationD
