@@ -1,9 +1,7 @@
 import { Telegraf, Telegram } from "telegraf"
-import { message } from "telegraf/filters"
 import { ExceptionHandlerD, LogClassCreationD } from "../types/decorators"
 import { logger } from "../utils/logger"
-import { textMessagesHandler } from "./handlers/text-messages-handler"
-import { commands } from "./commands/commands"
+import { messagesHandler } from "./messages-handler"
 
 @LogClassCreationD
 @ExceptionHandlerD()
@@ -16,18 +14,34 @@ export class TelegramBot {
     this.methods = this.me.telegram
   }
 
-  private listenTextMessages() {
-    this.me.on(message("text"), async context => {
+  private listenMessages() {  
+    this.me.on("message", async context => {
       const message = context.message
-      
-      textMessagesHandler.handle(message, this.methods)
+
+      messagesHandler.handle(message, this.methods)
+    })
+  }
+
+  private listenStart() {
+    this.me.start(async context => {
+      const message = context.message
+
+      logger.write(`User [${message.from.first_name}] with [${message.from.id}] id sent "start" command!`)
+    
+      context.sendMessage(
+        `Hello ${message.from.first_name}!\n` +
+        `Send me your important message and I will forward it to my owner.`
+      )
     })
   }
 
   public async launch() {
-    this.methods.setMyCommands(commands.get())
+    this.methods.setMyCommands([
+      { "command": "start", "description": "Starts the bot." }
+    ])
 
-    this.listenTextMessages()
+    this.listenStart()
+    this.listenMessages()
 
     this.me.launch()
 

@@ -1,4 +1,4 @@
-import { existsSync, appendFileSync, mkdirSync, readFileSync } from "fs"
+import { existsSync, appendFileSync, mkdirSync, readFileSync, writeFileSync } from "fs"
 import { ExceptionHandlerD, LogClassCreationD } from "../types/decorators"
 
 @LogClassCreationD
@@ -10,6 +10,36 @@ class FileSystem {
 
   public append(path: string, data: string): void {
     appendFileSync(path, data)
+  }
+
+  public read(path: string): string {
+    let result = ""
+
+    if (this.exists(path)) {
+      result = readFileSync(path, {"encoding": "utf-8"})
+    }
+
+    return result
+  }
+
+  public readJson<T extends {}>(path: string): T | undefined {
+    let result = undefined
+    
+    if (this.exists(path)) {
+      const stringData = this.read(path)
+      result = JSON.parse(stringData)
+    }
+
+    return result
+  }
+
+  public write(path: string, data: string): void {
+    writeFileSync(path, data)
+  }
+
+  public writeJson<T extends {}>(path: string, data: T): void {
+    const stringData = JSON.stringify(data, null, "\t")
+    this.write(path, stringData)
   }
 
   public makeDirectory(directoryPath: string): void {

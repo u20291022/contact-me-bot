@@ -1,11 +1,7 @@
-export interface TextMessage {
-  text: string,
+export interface Message {
+  text?: string,
   message_id: number,
-  chat: { id: number }
-  from: { id: number, first_name: string }
-}
-
-export interface BotCommand {
-  command: string;
-  description: string;
+  chat: { id: number },
+  from?: { id: number, first_name: string }, // ? is because telegraf gives error on reply_to_message
+  reply_to_message?: Message
 }
