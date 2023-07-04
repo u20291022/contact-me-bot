@@ -3,6 +3,7 @@ import { ExceptionHandlerD, LogClassCreationD } from "../types/decorators"
 import { Messages } from "../types/messages-handler"
 import { Message } from "../types/telegram"
 import { fileSystem } from "../utils/filesystem"
+import { logger } from "../utils/logger"
 
 @LogClassCreationD
 @ExceptionHandlerD()
@@ -39,7 +40,7 @@ class MessagesHandler {
     if (!message.from) {
       return
     }
-
+    console.log(methods)
     const sendedMessageSenderId = message.from.id
     const sendedMessageId = message.message_id
 
@@ -51,13 +52,15 @@ class MessagesHandler {
 
       const repliedMessageId = message.reply_to_message.message_id
       const repliedMessageSenderId = this.messages[repliedMessageId]
-
+      
       if (repliedMessageSenderId) {
-        methods.copyMessage(repliedMessageSenderId, this.botOwnerId, sendedMessageId)
+        methods.copyMessage(repliedMessageSenderId, this.botOwnerId, sendedMessageId) // i dont know how to wrap "methods" functions
+          .catch(exception => logger.write(`[copyMessage] Some error was throwed:\n` + exception))
       }
     }
     else {
       methods.forwardMessage(this.botOwnerId, sendedMessageSenderId, sendedMessageId)
+        .catch(exception => logger.write(`[forwardMessage] Some error was throwed:\n` + exception))
 
       // + 1 because forwarded message will have id greater by one
       // [10] hello -> [*forwards*] -> [11](*forwarded*) hello 
