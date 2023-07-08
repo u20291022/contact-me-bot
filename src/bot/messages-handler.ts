@@ -40,7 +40,7 @@ class MessagesHandler {
     if (!message.from) {
       return
     }
-    console.log(methods)
+
     const sendedMessageSenderId = message.from.id
     const sendedMessageId = message.message_id
 
@@ -63,7 +63,7 @@ class MessagesHandler {
         .catch(exception => logger.write(`[forwardMessage] Some error was throwed:\n` + exception))
 
       // + 1 because forwarded message will have id greater by one
-      // [10] hello -> [*forwards*] -> [11](*forwarded*) hello 
+      // {in user pm with bot} [10] hello -> [*forwards*] -> {in owner pm with bot} [11 index](*forwarded*) hello
       const messageIdToSave = sendedMessageId + 1
 
       this.messages[messageIdToSave] = sendedMessageSenderId.toString()
