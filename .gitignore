@@ -3,3 +3,4 @@ data
 dist
 yarn.lock
 .env
+package-lock.json

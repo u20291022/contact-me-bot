@@ -1,4 +1,5 @@
 import { Telegraf, Telegram } from "telegraf"
+import { message } from "telegraf/filters"
 import { ExceptionHandlerD, LogClassCreationD } from "../types/decorators"
 import { logger } from "../utils/logger"
 import { messagesHandler } from "./messages-handler"
@@ -15,7 +16,7 @@ export class TelegramBot {
   }
 
   private listenMessages() {  
-    this.me.on("message", async context => {
+    this.me.on(message("text"), async context => {
       const message = context.message
 
       messagesHandler.handle(message, this.methods)
@@ -35,7 +36,7 @@ export class TelegramBot {
     })
   }
 
-  public async launch() {
+  public async launch(onwerId: string) {
     this.methods.setMyCommands([
       { "command": "start", "description": "Starts the bot." }
     ])
